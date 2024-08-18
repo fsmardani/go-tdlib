@@ -2,7 +2,7 @@ package client
 
 import (
 	"errors"
-	"fmt"
+	// "fmt"
 	"time"
 )
 
