@@ -127,7 +127,7 @@ func (stateHandler *clientAuthorizer) Close() {
 	close(stateHandler.Password)
 }
 
-func CliInteractor(clientAuthorizer *clientAuthorizer) {
+func NonInteractiveCredentialsProvider(clientAuthorizer *clientAuthorizer, phoneNum string, password string, chCode chan string) {
 	for {
 		select {
 		case state, ok := <-clientAuthorizer.State:
@@ -137,24 +137,24 @@ func CliInteractor(clientAuthorizer *clientAuthorizer) {
 
 			switch state.AuthorizationStateType() {
 			case TypeAuthorizationStateWaitPhoneNumber:
-				fmt.Println("Enter phone number: ")
-				var phoneNumber string
-				fmt.Scanln(&phoneNumber)
+				// fmt.Println("Enter phone number: ")
+				// var phoneNumber string
+				// fmt.Scanln(&phoneNumber)
 
-				clientAuthorizer.PhoneNumber <- phoneNumber
+				clientAuthorizer.PhoneNumber <- phoneNum
 
 			case TypeAuthorizationStateWaitCode:
-				var code string
+				// var code string
 
-				fmt.Println("Enter code: ")
-				fmt.Scanln(&code)
+				// fmt.Println("Enter code: ")
+				// fmt.Scanln(&code)
 
-				clientAuthorizer.Code <- code
+				clientAuthorizer.Code <- <- chCode
 
 			case TypeAuthorizationStateWaitPassword:
-				fmt.Println("Enter password: ")
-				var password string
-				fmt.Scanln(&password)
+				// fmt.Println("Enter password: ")
+				// var password string
+				// fmt.Scanln(&password)
 
 				clientAuthorizer.Password <- password
 
